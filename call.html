@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N.js"></script>
+</head>
+
+<body>
+
+<h2>You are anonymous</h2>
+
+<button onclick="start()">Start Call</button>
+<button onclick="end()">End Call</button>
+
+<script>
+
+let client;
+
+async function start(){
+
+ const APP_ID="808c9563be754fbc8328f26d4df5aaea";
+ const room=localStorage.getItem("room");
+
+ client = AgoraRTC.createClient({mode:"rtc",codec:"vp8"});
+
+ await client.join(APP_ID, room, null, null);
+
+ const track =
+   await AgoraRTC.createMicrophoneAudioTrack();
+
+ await client.publish([track]);
+}
+
+async function end(){
+ await client.leave();
+ window.location.href="index.html";
+}
+
+</script>
+
+</body>
+</html>
+
