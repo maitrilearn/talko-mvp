@@ -44,7 +44,7 @@ async function loadSlots(){
 
 
 function startCall(){
-  localStorage.setItem("room","talko_"+Date.now());
+  localStorage.setItem("room","talko_test_room");
   window.location.href="call.html";
 }
 
