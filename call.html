@@ -20,21 +20,26 @@ async function start(){
  const APP_ID="808c9563be754fbc8328f26d4df5aaea";
  const room=localStorage.getItem("room");
 
- client = AgoraRTC.createClient({mode:"rtc",codec:"vp8"});
+  client = AgoraRTC.createClient({mode:"rtc",codec:"vp8"});
 
- await client.join(APP_ID, room, null, null);
+  // ⭐ LISTEN FOR REMOTE USERS
+  client.on("user-published", async (user, mediaType) => {
 
- const track =
-   await AgoraRTC.createMicrophoneAudioTrack();
+    await client.subscribe(user, mediaType);
 
- await client.publish([track]);
+    if(mediaType === "audio"){
+      const remoteTrack = user.audioTrack;
+      remoteTrack.play();   // ⭐ THIS WAS MISSING
+    }
+  });
+
+  await client.join(APP_ID, room, null, null);
+
+  const localTrack =
+      await AgoraRTC.createMicrophoneAudioTrack();
+
+  await client.publish([localTrack]);
 }
-
-async function end(){
- await client.leave();
- window.location.href="index.html";
-}
-
 </script>
 
 </body>
